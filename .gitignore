@@ -1,0 +1,16 @@
+# Simulacion
+*.vvp
+*.vcd
+
+# Sintesis
+*.json
+*.asc
+*.bin
+
+# Python
+__pycache__/
+*.pyc
+
+# Temporales de compilacion
+*.o
+*.elf
