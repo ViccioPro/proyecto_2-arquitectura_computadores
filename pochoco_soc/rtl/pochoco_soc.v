@@ -33,13 +33,21 @@ module pochoco_soc #(
   assign clk = i_Clk;
 
   // Power-on reset
+  // Acá fue clave cambiar la cantidad de ciclos
+  // ya que antes se demoraba tan poco que me 
+  // generaba problemas al prender la FPGA,
+  // a veces funcionaba bien (una de cada 20 veces aprox)
   reg  [15:0] por_cnt = 16'b0;
   wire        rst_ni;
   always @(posedge clk) begin
     if (por_cnt != 16'hFFFF) por_cnt <= por_cnt + 16'd1;
   end
   assign rst_ni = (por_cnt == 16'hFFFF);
+  // Lo importante es que al darle más tiempo en el reset
+  // se pudo estabilizar y ahora se puede iniciar el juego
+  // conectando y desconectando la FPGA de su fuente 
 
+  
   // Core-memory wiring
   wire        instr_req;
   wire [31:0] instr_addr, instr_rdata;
