@@ -33,12 +33,12 @@ module pochoco_soc #(
   assign clk = i_Clk;
 
   // Power-on reset
-  reg  [3:0] por_cnt = 4'b0;
-  wire       rst_ni;
+  reg  [15:0] por_cnt = 16'b0;
+  wire        rst_ni;
   always @(posedge clk) begin
-    if (por_cnt != 4'hF) por_cnt <= por_cnt + 4'd1;
+    if (por_cnt != 16'hFFFF) por_cnt <= por_cnt + 16'd1;
   end
-  assign rst_ni = (por_cnt == 4'hF);
+  assign rst_ni = (por_cnt == 16'hFFFF);
 
   // Core-memory wiring
   wire        instr_req;
