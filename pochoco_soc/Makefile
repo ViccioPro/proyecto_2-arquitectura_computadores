@@ -19,7 +19,7 @@ PCF := goboard.pcf
 # Assembly Configuration
 # ============================================================
 
-ASM := ../assembler_v1.py
+ASM := assembler_v1.py
 GAME_ASM := sw/game.s
 HEX := sw/game.hex
 
