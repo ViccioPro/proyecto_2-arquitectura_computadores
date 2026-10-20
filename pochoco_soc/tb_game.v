@@ -79,7 +79,7 @@ module tb_game;
         $display("==============================");
 
         // Esperar reset interno
-        repeat (30) @(posedge clk);
+        repeat (70000) @(posedge clk);
 
         // Pulsacion inicial
         switches = 4'b0001;
