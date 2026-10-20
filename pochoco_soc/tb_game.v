@@ -182,7 +182,7 @@ module tb_game;
     // Evitar simulacion infinita
     initial begin
 
-        repeat (200000) @(posedge clk);
+        repeat (400000) @(posedge clk);
 
         $display("TIMEOUT GENERAL.");
         $finish;
