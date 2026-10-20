@@ -33,23 +33,35 @@ Por lo tanto:
 
 ## Generar game.hex
 
-Desde la raíz del repositorio:
+Desde la carpeta `pochoco_soc`:
 
 ```bash
-python assembler_v1.py pochoco_soc/sw/game.s pochoco_soc/sw/game.hex
+python3 assembler_v1.py sw/game.s sw/game.hex
 ```
 
 El assembler utilizado fue desarrollado para el proyecto y genera una palabra de 32 bits en hexadecimal por línea.
+
+**Nota:** el Makefile genera automáticamente `game.hex` cuando se modifica `game.s` o `assembler_v1.py`, por lo que no es necesario ejecutar este comando manualmente al utilizar `make`.
 
 ## Síntesis y programación
 
 El top-level del proyecto es `game_top` y carga `sw/game.hex`.
 
-En sistemas con GNU Make instalado, desde la carpeta `pochoco_soc`:
+En sistemas con GNU Make, Python 3 y OSS CAD Suite instalados, desde la carpeta `pochoco_soc`:
 
 ```bash
 make all
 ```
+
+Este comando ejecuta automáticamente el ensamblador cuando corresponde, realiza la síntesis y el place & route, genera el bitstream y programa la FPGA mediante `iceprog`.
+
+Si solamente se desea compilar el proyecto y generar el bitstream, sin programar la FPGA:
+
+```bash
+make game_top.bin
+```
+
+Este comando permite verificar la compilación del proyecto sin necesidad de tener la Go Board conectada.
 
 También se puede realizar el flujo manualmente utilizando OSS CAD Suite.
 
@@ -62,8 +74,10 @@ yosys -p "read_verilog rtl/game_top.v rtl/pochoco_soc.v rtl/pochoco_periph.v rtl
 ### Place & route
 
 ```bash
-nextpnr-ice40 --hx1k --package vq100 --json game_top.json --pcf goboard.pcf --asc game_top.asc
+nextpnr-ice40 --hx1k --package vq100 --freq 25 --json game_top.json --pcf goboard.pcf --asc game_top.asc
 ```
+
+El parámetro `--freq 25` establece una frecuencia objetivo de 25 MHz para verificar la temporización del diseño.
 
 ### Generar bitstream
 
@@ -77,11 +91,29 @@ icepack game_top.asc game_top.bin
 iceprog game_top.bin
 ```
 
+Para este último paso se requiere que la Go Board esté conectada y sea reconocida por el sistema.
+
+## Inicialización del procesador
+
+Durante las pruebas físicas se detectó un problema de inicialización al encender la FPGA.
+
+El contador de Power-On Reset original utilizaba 4 bits, lo que proporcionaba un tiempo de inicialización demasiado corto.
+
+Para corregirlo, se amplió el contador a 16 bits en `rtl/pochoco_soc.v`:
+
+```verilog
+reg [15:0] por_cnt = 16'b0;
+```
+
+Con esta modificación, el RESET permanece activo durante aproximadamente 2,62 ms a 25 MHz, permitiendo un arranque más confiable del procesador.
+
+La corrección fue comprobada mediante pruebas de encendido y reinicio de la FPGA física.
+
 ## Simulación
 
-El archivo `pochoco_soc/tb_game.v` realiza una simulación automática de una partida completa.
+El archivo `pochoco_soc/tb_game.v` contiene un banco de pruebas para simular una partida completa.
 
-La prueba verifica:
+La prueba está diseñada para verificar:
 
 - 10 respuestas correctas.
 - Selección de los LEDs objetivo.
@@ -91,3 +123,5 @@ La prueba verifica:
 - Cálculo del promedio final.
 
 Para acelerar la simulación se reduce el parámetro `TenthCycles`. En la FPGA el valor utilizado es de 2.500.000 ciclos por décima de segundo.
+
+**Nota:** tras ampliar el Power-On Reset a 16 bits, es necesario adaptar la espera inicial del testbench antes de volver a ejecutar la simulación de la versión final.
