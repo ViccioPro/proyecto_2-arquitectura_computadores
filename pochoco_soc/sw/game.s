@@ -31,8 +31,8 @@ _start:
 
     # Para encender los LEDs del display en 11
     # lo usamos para debugguear el estado al que llega
-    addi x1, x0, 0x11
-    sw   x1, 0(x2)
+    #addi x1, x0, 0x11
+    #sw   x1, 0(x2)
 
 # ============================================================
 # Esperar una pulsacion para comenzar
@@ -46,8 +46,8 @@ wait_start_press:
 
     # Para encender los LEDs del display en 22
     # lo usamos para debugguear el estado al que llega
-    addi x1, x0, 0x22
-    sw   x1, 0(x2)
+    #addi x1, x0, 0x22
+    #sw   x1, 0(x2)
 
     # Tomamos una semilla dependiente del instante
     # en que el jugador inicio la partida.
