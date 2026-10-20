@@ -126,4 +126,8 @@ Para acelerar la simulación se reduce el parámetro `TenthCycles`. En la FPGA e
 
 **Nota:** tras ampliar el Power-On Reset a 16 bits, es necesario adaptar la espera inicial del testbench antes de volver a ejecutar la simulación de la versión final.
 
+### Imagen de confirmación de la simulación del testbench.
+
+Para confirmar el correcto funcionamiento del juego, se utiliza `iverilog` y `vpp`, estando en la carpeta de `pochoco_soc`. El resultado de la simulación se puede observar en la imagen a continuación:
+
 <img width="1142" height="814" alt="Foto_testbench_proyecto_2" src="https://github.com/user-attachments/assets/066ee148-7277-411e-a66f-a22b6e5ac1b7" />
