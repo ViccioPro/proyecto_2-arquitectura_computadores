@@ -125,3 +125,5 @@ La prueba está diseñada para verificar:
 Para acelerar la simulación se reduce el parámetro `TenthCycles`. En la FPGA el valor utilizado es de 2.500.000 ciclos por décima de segundo.
 
 **Nota:** tras ampliar el Power-On Reset a 16 bits, es necesario adaptar la espera inicial del testbench antes de volver a ejecutar la simulación de la versión final.
+
+<img width="1142" height="814" alt="Foto_testbench_proyecto_2" src="https://github.com/user-attachments/assets/066ee148-7277-411e-a66f-a22b6e5ac1b7" />
